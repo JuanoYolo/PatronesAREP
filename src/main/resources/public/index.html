@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Form with GET</h1>
+<form action="/hello">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br><br>
+
+
+    <form action="/action_page.php">
+        <p>Please select your favorite Web language:</p>
+        <input type="radio" id="intraday" name="fav_language" value="INTRADAY">
+        <label for="intraday">INTRADAY</label><br>
+        <input type="radio" id="daily" name="fav_language" value="DAILY">
+        <label for="daily">DAILY</label><br>
+        <input type="radio" id="weekly" name="fav_language" value="WEEKLY">
+        <label for="weekly">WEEKLY</label>
+
+    </form>
+
+
+    <input type="button" value="Submit" onclick="loadGetMsg()">
+</form>
+<div id="getrespmsg">
+    <table id="dataAnalize">
+        <tr>
+            <th>Time</th>
+            <th>open</th>
+            <th>high</th>
+            <th>low</th>
+            <th>close</th>
+            <th>volume</th>
+        </tr>
+    </table>
+</div>
+
+
+<script>
+    function loadGetMsg() {
+        var nameVar = document.getElementById("name").value;
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function () {
+            var datos = JSON.parse(this.responseText);
+            for (var i in datos['Time Series (5min)']) {
+                console.log(['Time Series (5min)'][i]);
+                document.getElementById("dataAnalize").innerHTML +=
+                    `<tr>
+                            <td>${i}</td>
+                            <td>${datos['Time Series (5min)'][i]['1. open']}</td>
+                        </tr>`
+            }
+        }
+        xhttp.open("GET", "/stock?name=" + nameVar);
+        xhttp.send();
+    }
+</script>
+</body>
+</html>
